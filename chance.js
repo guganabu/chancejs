@@ -2296,14 +2296,20 @@ options,
 
     // return random world amount of currency
     Chance.prototype.amount = function (options) {
-        options = initOptions(options, { min: 0, max: 10000, fixed: 2 });
+        options = initOptions(options, { min: 0, max: 10000, fixed: 2, currency: null });
         var amount = this.floating({
                 min: options.min,
                 max: options.max,
                 fixed: options.fixed,
             }).toString(),
             cents = amount.split(".")[1];
-        const currencyCode =  this.pick(this.currency_types()).code;
+        let currency = options.currency;
+        if (currency) {
+            currency = this.currency_types().find((c) => c.code === currency);
+        } else {
+            currency = this.pick(this.currency_types());
+        }
+        const currencyCode =  currency.code;
         if (cents === undefined) {
             amount += ".00";
         } else if (cents.length < 2) {

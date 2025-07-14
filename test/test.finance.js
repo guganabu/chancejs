@@ -245,3 +245,11 @@ test('amount() includes a valid currency code', t => {
         t.is(currencyCode.length, 3)
     })
 })
+
+test('amount() uses passed currency', t => {
+    _.times(1000, () => {
+        let amount = chance.amount({ currency: 'USD' })
+        let currencyCode = amount.split(" ")[0]
+        t.is(currencyCode, 'USD')
+    })
+})
